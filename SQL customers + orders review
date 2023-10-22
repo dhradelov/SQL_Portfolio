@@ -1,0 +1,51 @@
+--Select 
+
+SELECT * FROM Customers;
+SELECT * FROM Orders;
+SELECT * FROM Locations;
+SELECT * FROM Products;
+
+
+-- Calculate the total sales amount
+SELECT SUM(Price) AS TotalSales
+FROM Orders;
+
+-- customers with a total spending above $500
+SELECT C.CustomerID, C.FirstName, C.LastName, SUM(O.Price) AS TotalSpending
+FROM Customers C
+JOIN Orders O ON C.CustomerID = O.CustomerID
+GROUP BY C.CustomerID, C.FirstName, C.LastName
+HAVING SUM(O.Price) > 500;
+
+-- orders with detailed product information.
+SELECT O.OrderID, O.OrderDate, O.Status, O.Price, C.FirstName, C.LastName, P.NameOfProduct
+FROM Orders O
+JOIN Customers C ON O.CustomerID = C.CustomerID
+JOIN Products P ON O.ProductID = P.ProductID;
+
+-- average order price for each product category.
+SELECT P.Category, AVG(O.Price) AS AveragePrice
+FROM Orders O
+JOIN Products P ON O.ProductID = P.ProductID
+GROUP BY P.Category;
+
+-- number of orders for each status.
+SELECT Status, COUNT(*) AS OrderCount
+FROM Orders
+GROUP BY Status;
+
+-- locations with the highest number of customers.
+SELECT L.City, L.Country, COUNT(C.CustomerID) AS CustomerCount
+FROM Locations L
+LEFT JOIN Customers C ON L.LocationID = C.LocationID
+GROUP BY L.City, L.Country
+ORDER BY CustomerCount DESC
+Limit 7;
+
+
+-- total sales for each month in a specific year 2023
+SELECT EXTRACT(MONTH FROM OrderDate) AS Month, SUM(Price) AS TotalSales
+FROM Orders
+WHERE EXTRACT(YEAR FROM OrderDate) = 2023
+GROUP BY Month
+ORDER BY Month;
