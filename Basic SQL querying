@@ -1,0 +1,36 @@
+--using basic SQL functions - SELECT, SELECT DISTINCT, WHERE, AND, OR, BOOLEAN, WILDCARDS, IN, NOT IN, MAX, SUM, MIN, AVG 
+
+SELECT * FROM Customers 
+WHERE CustomerID = 5;
+
+SELECT * FROM Orders
+WHERE Status = 'Shipped';
+
+SELECT NameOfProduct, ProductID FROM Products
+WHERE Category = 'Electronics' OR SizeOfProduct = 5;
+
+SELECT Email, (email like '%.com%') AS dotcom_flag
+FROM Customers;
+
+SELECT * FROM Locations
+WHERE Country IN ('USA', 'UK');
+
+SELECT OrderID, OrderDate, Price FROM Orders
+ORDER BY Price DESC
+LIMIT 10;
+
+SELECT DISTINCT Country
+FROM Locations; 
+
+SELECT AVG(Price)
+FROM Orders;
+
+SELECT * FROM Customers
+FETCH FIRST 3 ROWS ONLY;
+
+---- JOINS 
+
+SELECT COUNT(CustomerID), Country
+FROM Customers CU
+INNER JOIN Locations L on  CU.LocationID = L.LocationID
+GROUP BY CustomerID, Country;
